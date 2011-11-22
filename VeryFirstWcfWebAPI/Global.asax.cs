@@ -6,6 +6,7 @@ using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
 using Ninject;
+using VeryFirstWcfWebAPI.Handlers;
 
 namespace VeryFirstWcfWebAPI {
 
@@ -14,7 +15,8 @@ namespace VeryFirstWcfWebAPI {
         protected void Application_Start(object sender, EventArgs e) {
 
             RouteTable.Routes.SetDefaultHttpConfiguration(new Microsoft.ApplicationServer.Http.WebApiConfiguration() { 
-                CreateInstance = (serviceType, context, request) => GetKernel().Get(serviceType)
+                CreateInstance = (serviceType, context, request) => GetKernel().Get(serviceType),
+                ErrorHandlers = (handlers, endpoint, description) => handlers.Add(new GlobalErrorHandler())
             });
 
             RouteTable.Routes.MapServiceRoute<People.PeopleApi>("Api/People");
